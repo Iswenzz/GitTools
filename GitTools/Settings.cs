@@ -1,11 +1,13 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Iswenzz.GitTools
 {
     public class Settings
     {
-        public User User { get; set; }
+        public User User { get; set; } = new User();
+        public API API { get; set; } = new API();
 
         public Settings()
         {
@@ -14,14 +16,18 @@ namespace Iswenzz.GitTools
                 File.WriteAllText("settings.json", "");
             string json = File.ReadAllText("settings.json");
 
-            // Deserialize settings.json
-            User = JsonConvert.DeserializeObject<User>(json);
-            if (User == null)
+            try
             {
-                json = JsonConvert.SerializeObject(new User());
-                File.WriteAllText("settings.json", json);
-                User = JsonConvert.DeserializeObject<User>(json);
+                // Deserialize settings.json
+                JObject desrializedJSON = JObject.Parse(json);
+                User = desrializedJSON["User"].ToObject<User>();
+                API = desrializedJSON["API"].ToObject<API>();
             }
+            catch { }
+
+            // Save settings.json
+            json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            File.WriteAllText("settings.json", json);
         }
     }
 }
