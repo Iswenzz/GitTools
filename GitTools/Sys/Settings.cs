@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Iswenzz.GitTools
+namespace Iswenzz.GitTools.Sys
 {
     public class Settings
     {

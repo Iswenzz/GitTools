@@ -1,4 +1,4 @@
-﻿namespace Iswenzz.GitTools
+﻿namespace Iswenzz.GitTools.Sys
 {
     public class API
     {
