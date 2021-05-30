@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp;
 using System;
 
-namespace Iswenzz.GitTools
+namespace Iswenzz.GitTools.Sys
 {
     public class Git
     {
