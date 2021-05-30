@@ -3,9 +3,9 @@ using System.Net;
 using System.Collections.Generic;
 using LibGit2Sharp;
 
-namespace Iswenzz.GitTools
+namespace Iswenzz.GitTools.Remotes
 {
-    public abstract class Remote : IDisposable
+    public abstract class AbstractRemote : IDisposable
     {
         public virtual WebClient WebClient { get; set; } = new WebClient();
 
