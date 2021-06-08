@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
+using Iswenzz.GitTools.Data;
 using Iswenzz.GitTools.Remotes;
 using Iswenzz.GitTools.Utils;
 using LibGit2Sharp;
@@ -20,6 +21,12 @@ namespace Iswenzz.GitTools.CLI
 
         [Option('o', "output-path", Required = true, HelpText = "The output repository path")]
         public string OutputPath { get; set; }
+
+        [Option('s', "since-date", HelpText = "Get commits since a specific date")]
+        public string SinceDate { get; set; } = DateTime.MinValue.ToString("O");
+
+        [Option('u', "until-date", HelpText = "Get commits until a specific date")]
+        public string UntilDate { get; set; } = DateTime.Now.ToString("O");
 
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
@@ -43,7 +50,11 @@ namespace Iswenzz.GitTools.CLI
             MethodInfo getUserCommits = remoteClassType.GetMethod("GetUserCommits");
 
             // Get the commits
-            List<Commit> commits = (List<Commit>)getUserCommits.Invoke(remoteInstance, null);
+            List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getUserCommits.Invoke(remoteInstance, null));
+            foreach (GitCommit commit in commits)
+                Console.WriteLine($"{commit.Committer?.When}");
+
+            Console.WriteLine(commits.Count);
         }
     }
 }
