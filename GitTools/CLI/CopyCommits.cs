@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
@@ -51,10 +52,15 @@ namespace Iswenzz.GitTools.CLI
 
             // Get the commits
             List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getUserCommits.Invoke(remoteInstance, null));
-            foreach (GitCommit commit in commits)
-                Console.WriteLine($"{commit.Committer?.When}");
 
-            Console.WriteLine(commits.Count);
+            // Open a temporary file in the default editor to pick all commits to copy
+            IEnumerable<string> commitLines = commits.Select(c => $"{c.Id} {c.Author.Email.PadRight(40)} {c.Message}");
+            EditorSelectableList editor = new EditorSelectableList();
+            editor.OpenWithContent(commitLines);
+            IEnumerable<string> selectedCommitLines = editor.GetFileContent();
+            IEnumerable<GitCommit> selectedCommits = commits.Where(c => selectedCommitLines.Any(l => l.Contains(c.Id)));
+            
+            // Commits to output repository
         }
     }
 }

@@ -18,8 +18,9 @@ namespace Iswenzz.GitTools.Remotes
         public override IEnumerable<GitCommit> GetUserCommits()
         {
             string since = DateTime.Parse(CLIParser.CopyCommitsOptions.SinceDate).ToString("O");
+            string until = DateTime.Parse(CLIParser.CopyCommitsOptions.UntilDate).ToString("O");
             string id = HttpUtility.UrlEncode(CLIParser.CopyCommitsOptions.InputURL);
-            string url = $"{API_V4}/projects/{id}/repository/commits?since={since}";
+            string url = $"{API_V4}/projects/{id}/repository/commits?since={since}&until={until}";
 
             string response = WebClient.DownloadString(url);
             dynamic json = JToken.Parse(response);
@@ -34,11 +35,11 @@ namespace Iswenzz.GitTools.Remotes
                     Committer = new Signature(
                         (string)commit.committer_name,
                         (string)commit.committer_email,
-                        DateTime.Parse((string)commit.committed_date)),
+                        DateTime.ParseExact((string)commit.committed_date, "MM/dd/yyyy HH:mm:ss", null)),
                     Author = new Signature(
                         (string)commit.author_name,
                         (string)commit.author_email,
-                        DateTime.Parse((string)commit.authored_date))
+                        DateTime.ParseExact((string)commit.authored_date, "MM/dd/yyyy HH:mm:ss", null))
                 };
             }
         }

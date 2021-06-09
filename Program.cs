@@ -25,7 +25,9 @@ namespace Iswenzz.GitTools
                 "-o",
                 "test",
                 "-s",
-                "25/06/1999"
+                "25/06/1999",
+                "-u",
+                "25/06/2015"
             };
             CLIParser.Parse(argList.ToArray());
 
