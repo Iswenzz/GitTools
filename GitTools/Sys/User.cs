@@ -1,5 +1,8 @@
 ﻿namespace Iswenzz.GitTools.Sys
 {
+    /// <summary>
+    /// User structure for the settings JSON.
+    /// </summary>
     public class User
     {
         public string Username { get; set; } = "";

@@ -10,11 +10,18 @@ using Newtonsoft.Json.Linq;
 
 namespace Iswenzz.GitTools.Remotes
 {
+    /// <summary>
+    /// GitLab remote.
+    /// </summary>
     [GitRemote("gitlab")]
     public class GitLab : AbstractRemote
     {
         public string API_V4 { get; set; } = "https://gitlab.com/api/v4";
 
+        /// <summary>
+        /// Get the user's commits.
+        /// </summary>
+        /// <returns></returns>
         public override IEnumerable<GitCommit> GetUserCommits()
         {
             string since = DateTime.Parse(CLIParser.CopyCommitsOptions.SinceDate).ToString("O");

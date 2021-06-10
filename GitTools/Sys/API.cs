@@ -1,5 +1,8 @@
 ﻿namespace Iswenzz.GitTools.Sys
 {
+    /// <summary>
+    /// API structure used in the settings JSON.
+    /// </summary>
     public class API
     {
         public string GITLAB_API_KEY { get; set; } = "";

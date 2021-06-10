@@ -2,6 +2,9 @@
 
 namespace Iswenzz.GitTools.Data
 {
+    /// <summary>
+    /// Commit structure.
+    /// </summary>
     public struct GitCommit
     {
         public string Id { get; set; }

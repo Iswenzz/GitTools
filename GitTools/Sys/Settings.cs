@@ -4,6 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Iswenzz.GitTools.Sys
 {
+    /// <summary>
+    /// JSON Settings.
+    /// </summary>
     public class Settings
     {
         public User User { get; set; } = new User();

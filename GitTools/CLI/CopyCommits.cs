@@ -8,10 +8,12 @@ using Iswenzz.GitTools.Data;
 using Iswenzz.GitTools.Remotes;
 using Iswenzz.GitTools.Sys;
 using Iswenzz.GitTools.Utils;
-using LibGit2Sharp;
 
 namespace Iswenzz.GitTools.CLI
 {
+    /// <summary>
+    /// Command to copy commits from one repository to another.
+    /// </summary>
     [Verb("copycommits", HelpText = "Copy commits from one repository to another")]
     public class CopyCommits : ICommand
     {
@@ -43,6 +45,9 @@ namespace Iswenzz.GitTools.CLI
             };
         }
 
+        /// <summary>
+        /// Execute the command.
+        /// </summary>
         public void Execute()
         {
             // Get the remote class to call the GetUserCommits method
@@ -54,7 +59,7 @@ namespace Iswenzz.GitTools.CLI
             // Get the commits
             List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getUserCommits.Invoke(remoteInstance, null));
 
-            // Open a temporary file in the default editor to pick all commits to copy
+            // Opens a temporary file in the default editor to pick all commits to copy
             IEnumerable<string> commitLines = commits.Select(c => $"{c.Id} {c.Author.Email.PadRight(40)} {c.Message}");
             EditorSelectableList editor = new EditorSelectableList();
             editor.OpenWithContent(commitLines);
