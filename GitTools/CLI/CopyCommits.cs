@@ -6,6 +6,7 @@ using CommandLine;
 using CommandLine.Text;
 using Iswenzz.GitTools.Data;
 using Iswenzz.GitTools.Remotes;
+using Iswenzz.GitTools.Sys;
 using Iswenzz.GitTools.Utils;
 using LibGit2Sharp;
 
@@ -59,8 +60,11 @@ namespace Iswenzz.GitTools.CLI
             editor.OpenWithContent(commitLines);
             IEnumerable<string> selectedCommitLines = editor.GetFileContent();
             IEnumerable<GitCommit> selectedCommits = commits.Where(c => selectedCommitLines.Any(l => l.Contains(c.Id)));
-            
+
             // Commits to output repository
+            Git git = new Git(CLIParser.CopyCommitsOptions.OutputPath);
+            foreach (GitCommit commit in commits)
+                git.Commit(commit);
         }
     }
 }

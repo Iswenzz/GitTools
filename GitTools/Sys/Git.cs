@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using Iswenzz.GitTools.Data;
+using LibGit2Sharp;
 using System;
 
 namespace Iswenzz.GitTools.Sys
@@ -10,6 +11,15 @@ namespace Iswenzz.GitTools.Sys
         public Git(string repoPath)
         {
             Repository = new Repository(repoPath);
+        }
+
+        public void Commit(GitCommit commit)
+        {
+            CommitOptions options = new CommitOptions
+            {
+                AllowEmptyCommit = true
+            };
+            Repository.Commit(commit.Message, commit.Author, commit.Committer, options);
         }
 
         public void Commit(string message, DateTime date = default)
