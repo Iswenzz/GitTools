@@ -16,8 +16,8 @@ namespace Iswenzz.GitTools
         /// <param name="args">The program arguments.</param>
         public static void Main(string[] args)
         {
-            CLIParser.Parse(args);
             Settings = new Settings();
+            CLIParser.Parse(args);
         }
     }
 }

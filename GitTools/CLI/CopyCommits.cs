@@ -32,6 +32,9 @@ namespace Iswenzz.GitTools.CLI
         [Option('u', "until-date", HelpText = "Get commits until a specific date")]
         public string UntilDate { get; set; } = DateTime.Now.ToString("O");
 
+        [Option('e', "filter-email", HelpText = "Filter commits by the email in the settings.json file")]
+        public bool FilterEmail { get; set; }
+
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
         {
