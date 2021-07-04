@@ -38,7 +38,7 @@ namespace Iswenzz.GitTools.Remotes
         {
             List<GitCommit> commits = new List<GitCommit>();
             string since = (sinceDate ?? DateTime.MinValue).ToString("O");
-            string until = (untilDate ?? DateTime.Today).ToString("O");
+            string until = (untilDate ?? DateTime.Now).ToString("O");
             string id = HttpUtility.UrlEncode(repositoryId);
             int pageIndex = 1;
 

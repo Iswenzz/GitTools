@@ -40,7 +40,9 @@ namespace Iswenzz.GitTools.CLI
                     new CopyCommits {
                         Remote = "gitlab",
                         RepositoryName = "\"gitlab-org/gitlab\"",
-                        OutputRepository = "\"C:\\Repository\""
+                        OutputRepository = "\"C:\\Repository\"",
+                        SinceDate = "25/06/1999",
+                        UntilDate = "04/07/2021"
                     })
             };
         }
@@ -59,10 +61,10 @@ namespace Iswenzz.GitTools.CLI
             // Get the commits
             object[] arguments = new object[]
             {
-                CLIParser.CopyCommitsOptions.RepositoryName,
+                RepositoryName,
                 Program.Settings.User.Username,
-                DateTime.Parse(CLIParser.CopyCommitsOptions.SinceDate),
-                DateTime.Parse(CLIParser.CopyCommitsOptions.UntilDate)
+                DateTime.Parse(SinceDate),
+                DateTime.Parse(UntilDate)
             };
             List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getRepositoryUserCommits
                 .Invoke(remoteInstance, arguments));
@@ -75,7 +77,7 @@ namespace Iswenzz.GitTools.CLI
             IEnumerable<GitCommit> selectedCommits = commits.Where(c => selectedCommitLines.Any(l => l.Contains(c.Id)));
 
             // Commits to output repository
-            Git git = new Git(CLIParser.CopyCommitsOptions.OutputRepository);
+            Git git = new Git(OutputRepository);
             foreach (GitCommit commit in commits)
                 git.Commit(commit);
         }
