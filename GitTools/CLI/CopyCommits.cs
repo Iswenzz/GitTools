@@ -20,20 +20,17 @@ namespace Iswenzz.GitTools.CLI
         [Option('r', "remote", Required = true, HelpText = "The remote software")]
         public string Remote { get; set; }
 
-        [Option('i', "input-url", Required = true, HelpText = "The input repository URL")]
-        public string InputURL { get; set; }
+        [Option('i', "input-repository", Required = true, HelpText = "The input repository URL")]
+        public string RepositoryName { get; set; }
 
-        [Option('o', "output-path", Required = true, HelpText = "The output repository path")]
-        public string OutputPath { get; set; }
+        [Option('o', "output-repository", Required = true, HelpText = "The output repository path")]
+        public string OutputRepository { get; set; }
 
         [Option('s', "since-date", HelpText = "Get commits since a specific date")]
         public string SinceDate { get; set; } = DateTime.MinValue.ToString("O");
 
         [Option('u', "until-date", HelpText = "Get commits until a specific date")]
         public string UntilDate { get; set; } = DateTime.Now.ToString("O");
-
-        [Option('e', "filter-email", HelpText = "Filter commits by the email in the settings.json file")]
-        public bool FilterEmail { get; set; }
 
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
@@ -42,8 +39,8 @@ namespace Iswenzz.GitTools.CLI
                 new Example("Copy the commits on a specific date, from a gitlab repository to a git repository",
                     new CopyCommits {
                         Remote = "gitlab",
-                        InputURL = "https://gitlab.com/gitlab-org/gitlab",
-                        OutputPath = @"C:\Repository"
+                        RepositoryName = "\"gitlab-org/gitlab\"",
+                        OutputRepository = "\"C:\\Repository\""
                     })
             };
         }
@@ -57,20 +54,28 @@ namespace Iswenzz.GitTools.CLI
             Type remoteClassType = Reflect.RetrieveTypeFromCustomAttributeMetadata(
                 $"{nameof(GitRemoteAttribute)}-{Remote}");
             AbstractRemote remoteInstance = (AbstractRemote)Activator.CreateInstance(remoteClassType);
-            MethodInfo getUserCommits = remoteClassType.GetMethod("GetUserCommits");
+            MethodInfo getRepositoryUserCommits = remoteClassType.GetMethod("GetRepositoryUserCommits");
 
             // Get the commits
-            List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getUserCommits.Invoke(remoteInstance, null));
+            object[] arguments = new object[]
+            {
+                CLIParser.CopyCommitsOptions.RepositoryName,
+                Program.Settings.User.Username,
+                DateTime.Parse(CLIParser.CopyCommitsOptions.SinceDate),
+                DateTime.Parse(CLIParser.CopyCommitsOptions.UntilDate)
+            };
+            List<GitCommit> commits = new List<GitCommit>((IEnumerable<GitCommit>)getRepositoryUserCommits
+                .Invoke(remoteInstance, arguments));
 
             // Opens a temporary file in the default editor to pick all commits to copy
-            IEnumerable<string> commitLines = commits.Select(c => $"{c.Id} {c.Author.Email.PadRight(40)} {c.Message}");
+            IEnumerable<string> commitLines = commits.Select(c => $"{c.Id} {c.Author.Email,-40} {c.Message}");
             EditorSelectableList editor = new EditorSelectableList();
             editor.OpenWithContent(commitLines);
             IEnumerable<string> selectedCommitLines = editor.GetFileContent();
             IEnumerable<GitCommit> selectedCommits = commits.Where(c => selectedCommitLines.Any(l => l.Contains(c.Id)));
 
             // Commits to output repository
-            Git git = new Git(CLIParser.CopyCommitsOptions.OutputPath);
+            Git git = new Git(CLIParser.CopyCommitsOptions.OutputRepository);
             foreach (GitCommit commit in commits)
                 git.Commit(commit);
         }

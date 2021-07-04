@@ -5,12 +5,14 @@
     /// </summary>
     public class User
     {
+        public string Name { get; set; } = "";
         public string Username { get; set; } = "";
         public string EMail { get; set; } = "";
 
         public User() { }
-        public User(string username, string email)
+        public User(string name, string username, string email)
         {
+            Name = name;
             Username = username;
             EMail = email;
         }

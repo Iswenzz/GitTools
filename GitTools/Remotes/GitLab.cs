@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Web;
-using Iswenzz.GitTools.CLI;
 using Iswenzz.GitTools.Data;
 using Iswenzz.GitTools.Utils;
 using LibGit2Sharp;
@@ -27,41 +26,73 @@ namespace Iswenzz.GitTools.Remotes
         }
 
         /// <summary>
-        /// Get the user's commits.
+        /// Get the user's commits from a specific repository.
         /// </summary>
+        /// <param name="repositoryId">The repository ID.</param>
+        /// <param name="userName">The author username.</param>
+        /// <param name="sinceDate">Search commits since a specific date.</param>
+        /// <param name="untilDate">Search commits until a specific date.</param>
         /// <returns></returns>
-        public override IEnumerable<GitCommit> GetUserCommits()
+        public override IEnumerable<GitCommit> GetRepositoryUserCommits(string repositoryId, string userName, 
+            DateTime? sinceDate = null, DateTime? untilDate = null)
         {
-            // Request params
-            string since = DateTime.Parse(CLIParser.CopyCommitsOptions.SinceDate).ToString("O");
-            string until = DateTime.Parse(CLIParser.CopyCommitsOptions.UntilDate).ToString("O");
-            string id = HttpUtility.UrlEncode(CLIParser.CopyCommitsOptions.InputURL);
-            string url = $"{API_V4}/projects/{id}/repository/commits?since={since}&until={until}&per_page=100";
+            List<GitCommit> commits = new List<GitCommit>();
+            string since = (sinceDate ?? DateTime.MinValue).ToString("O");
+            string until = (untilDate ?? DateTime.Today).ToString("O");
+            string id = HttpUtility.UrlEncode(repositoryId);
+            int pageIndex = 1;
+
+            try
+            {
+                while (true)
+                {
+                    string url = $"{API_V4}/projects/{id}/events?action=pushed&after={since}&before={until}&per_page=100&page={pageIndex++}";
+
+                    string response = WebClient.DownloadString(url);
+                    dynamic json = JToken.Parse(response);
+                    if (json.Count <= 0) break;
+                    Console.WriteLine($"GET {url}");
+
+                    foreach (dynamic action in json)
+                    {
+                        if ((string)action.author.username != userName)
+                            continue;
+                        commits.Add(GetSingleCommit(repositoryId, (string)action.push_data.commit_to));
+                    }
+                }
+            }
+            catch (WebException) { }
+            return commits;
+        }
+
+        /// <summary>
+        /// Get a single commit from a specific hash.
+        /// </summary>
+        /// <param name="repositoryId">The repository ID.</param>
+        /// <param name="commitHash">The commits hash.</param>
+        /// <returns></returns>
+        public override GitCommit GetSingleCommit(string repositoryId, string commitHash)
+        {
+            string id = HttpUtility.UrlEncode(repositoryId);
+            string url = $"{API_V4}/projects/{id}/repository/commits/{commitHash}";
 
             string response = WebClient.DownloadString(url);
             dynamic json = JToken.Parse(response);
+            Console.WriteLine($"GET {url}");
 
-            foreach (dynamic commit in json)
+            return new GitCommit
             {
-                // Filter by email
-                if (CLIParser.CopyCommitsOptions.FilterEmail && commit.author_email != Program.Settings.User.EMail)
-                    continue;
-
-                yield return new GitCommit
-                {
-                    Id = (string)commit.id,
-                    Message = (string)commit.title,
-                    MessageShort = (string)commit.message,
-                    Committer = new Signature(
-                        (string)commit.committer_name,
-                        (string)commit.committer_email,
-                        DateTime.ParseExact((string)commit.committed_date, "MM/dd/yyyy HH:mm:ss", null)),
-                    Author = new Signature(
-                        (string)commit.author_name,
-                        (string)commit.author_email,
-                        DateTime.ParseExact((string)commit.authored_date, "MM/dd/yyyy HH:mm:ss", null))
-                };
-            }
+                Id = (string)json.id,
+                Message = (string)json.title,
+                Committer = new Signature(
+                    (string)json.committer_name,
+                    (string)json.committer_email,
+                    DateTime.ParseExact((string)json.committed_date, "MM/dd/yyyy HH:mm:ss", null)),
+                Author = new Signature(
+                    (string)json.author_name,
+                    (string)json.author_email,
+                    DateTime.ParseExact((string)json.authored_date, "MM/dd/yyyy HH:mm:ss", null))
+            };
         }
     }
 }
