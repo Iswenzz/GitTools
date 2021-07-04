@@ -55,9 +55,15 @@ namespace Iswenzz.GitTools.Remotes
 
                     foreach (dynamic action in json)
                     {
-                        if ((string)action.author.username != userName)
-                            continue;
-                        commits.Add(GetSingleCommit(repositoryId, (string)action.push_data.commit_to));
+                        try
+                        {
+                            if ((string)action.author.username != userName || 
+                                string.IsNullOrEmpty((string)action.push_data.commit_to))
+                                continue;
+
+                            commits.Add(GetSingleCommit(repositoryId, (string)action.push_data.commit_to));
+                        }
+                        catch (WebException) { }
                     }
                 }
             }
