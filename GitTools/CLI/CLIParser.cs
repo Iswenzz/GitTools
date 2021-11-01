@@ -28,7 +28,7 @@ namespace Iswenzz.GitTools.CLI
         /// </summary>
         /// <typeparam name="T">Class that implements ICommand interface.</typeparam>
         /// <param name="options">The parsed options.</param>
-        private static void ParseAndExecute<T>(T options) where T : ICommand => 
+        private static void ParseAndExecute<T>(T options) where T : ICMD => 
             options.Execute();
     }
 }

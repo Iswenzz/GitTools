@@ -3,7 +3,7 @@
     /// <summary>
     /// Executable command interface.
     /// </summary>
-    public interface ICommand
+    public interface ICMD
     {
         public void Execute();
     }

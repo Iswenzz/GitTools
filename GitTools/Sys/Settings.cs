@@ -9,11 +9,15 @@ namespace Iswenzz.GitTools.Sys
     /// </summary>
     public class Settings
     {
-        public User User { get; set; } = new User();
-        public API API { get; set; } = new API();
+        public User User { get; set; }
+        public API API { get; set; }
 
         public Settings()
         {
+            // Deserialize
+            User = new();
+            API = new();
+
             // Load settings.json
             if (!File.Exists("settings.json"))
                 File.WriteAllText("settings.json", "");
