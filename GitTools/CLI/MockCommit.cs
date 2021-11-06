@@ -11,7 +11,7 @@ namespace Iswenzz.GitTools.CLI
     /// Command to create a commit at a specific date.
     /// </summary>
     [Verb("commit", HelpText = "Create a commit at a specific date.")]
-    public class Commit : ICMD
+    public class MockCommit : ICMD
     {
         [Option('m', "message", Required = true, HelpText = "The commit message.")]
         public string Message { get; set; }
@@ -27,7 +27,7 @@ namespace Iswenzz.GitTools.CLI
         {
             get => new List<Example> {
                 new Example("Create a commit at a specific date",
-                    new Commit {
+                    new MockCommit {
                         OutputRepository = "C:\\Repository",
                         Message = "Happy Birthday !",
                         Date = "25/06/2021"
@@ -42,7 +42,7 @@ namespace Iswenzz.GitTools.CLI
         {
             // Commits to output repository
             Git git = new(OutputRepository);
-            git.Commit(Program.Settings.User, Message, DateTime.Parse(Date));
+            git.MockCommit(Program.Settings.User, Message, DateTime.Parse(Date));
         }
     }
 }

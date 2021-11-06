@@ -9,7 +9,7 @@ namespace Iswenzz.GitTools.CLI
     {
         public static Options Options { get; set; }
         public static CopyCommits CopyCommitsOptions { get; set; }
-        public static Commit Commit { get; set; }
+        public static MockCommit Commit { get; set; }
 
         /// <summary>
         /// Parse the program arguments.
@@ -17,10 +17,10 @@ namespace Iswenzz.GitTools.CLI
         /// <param name="args">The program arguments.</param>
         public static void Parse(string[] args)
         {
-            Parser.Default.ParseArguments<Options, CopyCommits, Commit>(args)
+            Parser.Default.ParseArguments<Options, CopyCommits, MockCommit>(args)
                 .WithParsed<Options>(options => ParseAndExecute(Options = options))
                 .WithParsed<CopyCommits>(options => ParseAndExecute(CopyCommitsOptions = options))
-                .WithParsed<Commit>(options => ParseAndExecute(Commit = options));
+                .WithParsed<MockCommit>(options => ParseAndExecute(Commit = options));
         }
 
         /// <summary>
