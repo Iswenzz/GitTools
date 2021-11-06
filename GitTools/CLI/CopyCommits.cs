@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
+using LibGit2Sharp;
 
-using Iswenzz.GitTools.Data;
-using Iswenzz.GitTools.Remotes;
 using Iswenzz.GitTools.Sys;
 using Iswenzz.GitTools.Utils;
+using System.IO;
 
 namespace Iswenzz.GitTools.CLI
 {
@@ -31,6 +30,9 @@ namespace Iswenzz.GitTools.CLI
         [Option('u', "until-date", HelpText = "Get commits until a specific date.")]
         public string UntilDate { get; set; } = DateTime.Now.ToString("O");
 
+        [Option('e', "email", HelpText = "Filter the commits by email.")]
+        public string Email { get; set; }
+
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
         {
@@ -50,28 +52,35 @@ namespace Iswenzz.GitTools.CLI
         /// </summary>
         public void Execute()
         {
-            // Get the user commits
-            CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
             Git inputGit = new(InputRepository);
-            List<GitCommit> commits = inputGit.GetUserCommits(
-                Program.Settings.User,
+            Git outputGit = new(OutputRepository);
+
+            string inputRepositoryName = Path.GetFileName(InputRepository);
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
+
+            // Get the user commits
+            List<Commit> commits = inputGit.GetCommits(
                 DateTime.Parse(SinceDate, culture),
-                DateTime.Parse(UntilDate, culture));
+                DateTime.Parse(UntilDate, culture),
+                Email);
+
+            // Add the input repository as a remote in the output repository to cherry pick commits
+            outputGit.AddRemote(inputRepositoryName, InputRepository);
 
             // Opens a temporary file in the default editor to pick all commits to copy
             IEnumerable<string> commitLines = commits
-                .Select(c => $"{c.ID} {c.MessageShort}");
+                .Where(outputGit.ObjectExists)
+                .Select(c => $"{c.Id.Sha} {c.MessageShort}");
             using EditorSelectableList editor = new();
             editor.OpenWithContent(commitLines);
 
             IEnumerable<string> selectedCommitLines = editor.GetFileContent();
-            IEnumerable<GitCommit> selectedCommits = commits
-                .Where(c => selectedCommitLines.Any(l => l.Contains(c.ID)));
+            IEnumerable<Commit> selectedCommits = commits
+                .Where(c => selectedCommitLines.Any(l => l.Contains(c.Id.Sha)));
 
-            // Commits to output repository
-            Git outputGit = new(OutputRepository);
-            foreach (GitCommit commit in commits)
-                outputGit.Commit(commit);
+            // Cherry-pick selected commits to the output repository
+            foreach (Commit commit in selectedCommits)
+                outputGit.CherryPick(commit);
         }
     }
 }
