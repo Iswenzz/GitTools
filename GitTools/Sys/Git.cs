@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using LibGit2Sharp;
 
 namespace Iswenzz.GitTools.Sys
@@ -54,6 +55,7 @@ namespace Iswenzz.GitTools.Sys
         /// Get the commits in a specific time range and can be filtered by email. 
         /// Working with squashed commits as well.
         /// </summary>
+        [DebuggerNonUserCode]
         public List<Commit> GetCommits(DateTime sinceDate = default, DateTime untilDate = default, 
             string email = null)
         {
