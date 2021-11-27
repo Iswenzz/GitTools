@@ -66,6 +66,7 @@ namespace Iswenzz.GitTools.CLI
 
             // Add the input repository as a remote in the output repository to cherry pick commits
             outputGit.AddRemote(inputRepositoryName, InputRepository);
+            outputGit.FetchRemote(inputRepositoryName);
 
             // Opens a temporary file in the default editor to pick all commits to copy
             IEnumerable<string> commitLines = commits

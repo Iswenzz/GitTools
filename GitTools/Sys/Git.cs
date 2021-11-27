@@ -31,9 +31,16 @@ namespace Iswenzz.GitTools.Sys
             if (Repository.Network.Remotes[name] == null)
             {
                 Repository.Network.Remotes.Add(name, url);
-                Repository.Network.Fetch(name, Array.Empty<string>());
+                FetchRemote(name);
             }
         }
+
+        /// <summary>
+        /// Fetch a remote.
+        /// </summary>
+        /// <param name="name">The remote name.</param>
+        public void FetchRemote(string name) =>
+            Repository.Network.Fetch(name, Array.Empty<string>());
 
         /// <summary>
         /// Remove a specific remote.
@@ -87,6 +94,7 @@ namespace Iswenzz.GitTools.Sys
         {
             try
             {
+                Repository.Reset(ResetMode.Hard);
                 CherryPickOptions cpOptions = new() { FileConflictStrategy = CheckoutFileConflictStrategy.Theirs };
                 CherryPickResult cherryPickResult = Repository.CherryPick(commit, commit.Committer, cpOptions);
 
@@ -96,7 +104,7 @@ namespace Iswenzz.GitTools.Sys
                     Repository.Commit(commit.Message, commit.Author, commit.Committer);
                 }
             }
-            catch { }
+            catch (Exception e) { Console.WriteLine(e.Message); }
         }
 
         /// <summary>
