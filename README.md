@@ -24,14 +24,16 @@ Iswenzz (c) 2021
 $ ./GitTools.exe copycommits --help
 USAGE:
 Copy the commits on a specific date:
-  gittools copycommits --input-repository "C:\Repository\A" --output-repository "C:\Repository\B" --since-date 25/06/1999
-
-  --until-date 04/07/2021
+  gittools copycommits -u Iswenzz -e alexisnardiello@gmail.com -i "C:\Repository\A" -o "C:\Repository\B" --since-date 25/06/1999 --until-date 04/07/2021
+  
+  -u, --user                 Required. The user.
+  -e, --email                Required. The email.
+  -f, --filter               Filter the commits by email.
   -i, --input-repository     Required. The input repository path.
   -o, --output-repository    Required. The output repository path.
-  -s, --since-date           Get commits since a specific date.
-  -u, --until-date           Get commits until a specific date.
-  -e, --email                Filter the commits by email.
+  --since-date               Get commits since a specific date.
+  --until-date               Get commits until a specific date.
+  --empty                    Copy as empty commit.
   --help                     Display this help screen.
   --version                  Display version information.
 ```
