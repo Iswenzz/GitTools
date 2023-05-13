@@ -35,7 +35,7 @@ namespace Iswenzz.GitTools.Utils
         {
             IEnumerable<string> commitLines = commits
                 .Where(git.ObjectExists)
-                .Select(c => $"{c.Id.Sha} {c.MessageShort}");
+                .Select(c => $"{c.Id.Sha} {c.Committer.Email} {c.MessageShort}");
 
             OpenWithContent(commitLines);
             IEnumerable<string> selectedCommitLines = GetFileContent();

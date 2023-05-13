@@ -11,7 +11,7 @@ namespace Iswenzz.GitTools.Sys
     {
         public Repository Repository { get; set; }
         public string User { get; set; }
-        public string EMail { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Initialize a new Git instance with the specified git repository.
@@ -23,7 +23,7 @@ namespace Iswenzz.GitTools.Sys
         {
             Repository = new(repository);
             User = user;
-            EMail = email;
+            Email = email;
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Iswenzz.GitTools.Sys
             if (date == DateTime.MinValue)
                 date = DateTime.Now;
 
-            Signature author = new(User, EMail, date);
+            Signature author = new(User, Email, date);
             Signature committer = author;
 
             CommitOptions options = new()

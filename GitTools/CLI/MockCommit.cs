@@ -17,7 +17,7 @@ namespace Iswenzz.GitTools.CLI
         public string User { get; set; }
 
         [Option('e', "email", Required = true, HelpText = "The email.")]
-        public string EMail { get; set; }
+        public string Email { get; set; }
 
         [Option('m', "message", Required = true, HelpText = "The commit message.")]
         public string Message { get; set; }
@@ -35,7 +35,7 @@ namespace Iswenzz.GitTools.CLI
                 new Example("Create a commit at a specific date",
                     new MockCommit {
                         User = "Iswenzz",
-                        EMail = "alexisnardiello@gmail.com",
+                        Email = "alexisnardiello@gmail.com",
                         OutputRepository = "C:\\Repository",
                         Message = "Happy Birthday !",
                         Date = "25/06/2021"
@@ -49,7 +49,7 @@ namespace Iswenzz.GitTools.CLI
         public void Execute()
         {
             // Commits to output repository
-            Git git = new(User, EMail, OutputRepository);
+            Git git = new(User, Email, OutputRepository);
             git.MockCommit(Message, DateTime.Parse(Date));
         }
     }
