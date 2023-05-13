@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Iswenzz.GitTools.Sys;
+using LibGit2Sharp;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Iswenzz.GitTools.Utils
 {
     /// <summary>
     /// Open a temporary file in the default editor to pick all lines to select.
     /// </summary>
-    public class EditorSelectableList : IDisposable
+    public class Editor : IDisposable
     {
         public string FilePath { get; set; }
         public Process Process { get; set; }
@@ -16,9 +20,26 @@ namespace Iswenzz.GitTools.Utils
         /// <summary>
         /// Initialize a new EditorSlectableList instance.
         /// </summary>
-        public EditorSelectableList()
+        public Editor()
         {
             FilePath = $"{Path.GetTempFileName()}.txt";
+        }
+
+        /// <summary>
+        /// Select commits from git repository.
+        /// </summary>
+        /// <param name="commits">The commits.</param>
+        /// <param name="git">The git repository.</param>
+        /// <returns></returns>
+        public List<Commit> SelectCommits(List<Commit> commits, Git git)
+        {
+            IEnumerable<string> commitLines = commits
+                .Where(git.ObjectExists)
+                .Select(c => $"{c.Id.Sha} {c.MessageShort}");
+
+            OpenWithContent(commitLines);
+            IEnumerable<string> selectedCommitLines = GetFileContent();
+            return commits.Where(c => selectedCommitLines.Any(l => l.Contains(c.Id.Sha))).ToList();
         }
 
         /// <summary>
@@ -42,7 +63,7 @@ namespace Iswenzz.GitTools.Utils
             {
                 StartInfo = new ProcessStartInfo(FilePath)
                 {
-                    UseShellExecute = true
+                    UseShellExecute = true,
                 }
             };
             Process.Start();

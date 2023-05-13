@@ -8,7 +8,7 @@ namespace Iswenzz.GitTools.CLI
     public static class CLIParser
     {
         public static Options Options { get; set; }
-        public static CopyCommits CopyCommitsOptions { get; set; }
+        public static CopyCommits CopyCommits { get; set; }
         public static MockCommit Commit { get; set; }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Iswenzz.GitTools.CLI
         {
             Parser.Default.ParseArguments<Options, CopyCommits, MockCommit>(args)
                 .WithParsed<Options>(options => ParseAndExecute(Options = options))
-                .WithParsed<CopyCommits>(options => ParseAndExecute(CopyCommitsOptions = options))
+                .WithParsed<CopyCommits>(options => ParseAndExecute(CopyCommits = options))
                 .WithParsed<MockCommit>(options => ParseAndExecute(Commit = options));
         }
 

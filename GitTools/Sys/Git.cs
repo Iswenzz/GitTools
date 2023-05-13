@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using LibGit2Sharp;
 
 namespace Iswenzz.GitTools.Sys
@@ -11,14 +10,20 @@ namespace Iswenzz.GitTools.Sys
     public class Git
     {
         public Repository Repository { get; set; }
+        public string User { get; set; }
+        public string EMail { get; set; }
 
         /// <summary>
         /// Initialize a new Git instance with the specified git repository.
         /// </summary>
-        /// <param name="repoPath">Git repository path.</param>
-        public Git(string repoPath)
+        /// <param name="user">The user.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="repository">Git repository path.</param>
+        public Git(string user, string email, string repository)
         {
-            Repository = new(repoPath);
+            Repository = new(repository);
+            User = user;
+            EMail = email;
         }
 
         /// <summary>
@@ -62,12 +67,11 @@ namespace Iswenzz.GitTools.Sys
         /// Get the commits in a specific time range and can be filtered by email. 
         /// Working with squashed commits as well.
         /// </summary>
-        [DebuggerNonUserCode]
         public List<Commit> GetCommits(DateTime sinceDate = default, DateTime untilDate = default, 
             string email = null)
         {
             DateTime since = sinceDate;
-            DateTime until = untilDate != DateTime.MinValue ? untilDate : DateTime.Now;
+            DateTime until = untilDate != DateTime.UnixEpoch ? untilDate : DateTime.Now;
 
             List<Commit> commits = new();
             foreach (GitObject o in Repository.ObjectDatabase)
@@ -90,21 +94,31 @@ namespace Iswenzz.GitTools.Sys
         /// Cherry-pick a specific commit.
         /// </summary>
         /// <param name="commit">The commit to cherry-pick.</param>
-        public void CherryPick(Commit commit)
+        /// <param name="empty">Commit as empty.</param>
+        public void CherryPick(Commit commit, bool empty = false)
         {
             try
             {
-                Repository.Reset(ResetMode.Hard);
-                CherryPickOptions cpOptions = new() { FileConflictStrategy = CheckoutFileConflictStrategy.Theirs };
-                CherryPickResult cherryPickResult = Repository.CherryPick(commit, commit.Committer, cpOptions);
+                if (empty) throw new EmptyCommitException();
 
-                if (cherryPickResult.Status == CherryPickStatus.Conflicts)
+                Repository.Reset(ResetMode.Hard);
+                CherryPickOptions options = new() { FileConflictStrategy = CheckoutFileConflictStrategy.Theirs };
+                CherryPickResult result = Repository.CherryPick(commit, commit.Committer, options);
+
+                if (result.Status == CherryPickStatus.Conflicts)
                 {
                     Commands.Stage(Repository, "*");
                     Repository.Commit(commit.Message, commit.Author, commit.Committer);
                 }
             }
-            catch (Exception e) { Console.WriteLine(e.Message); }
+            catch (EmptyCommitException)
+            {
+                MockCommit(commit.Message, commit.Committer.When.DateTime);
+            }
+            catch (Exception e) 
+            { 
+                Console.WriteLine(e.Message); 
+            }
         }
 
         /// <summary>
@@ -113,12 +127,12 @@ namespace Iswenzz.GitTools.Sys
         /// <param name="user">The user to commit.</param>
         /// <param name="message">The commit message.</param>
         /// <param name="date">The commit date.</param>
-        public void MockCommit(User user, string message, DateTime date = default)
+        public void MockCommit(string message, DateTime date = default)
         {
             if (date == DateTime.MinValue)
                 date = DateTime.Now;
 
-            Signature author = new(user.Username, user.EMail, date);
+            Signature author = new(User, EMail, date);
             Signature committer = author;
 
             CommitOptions options = new()

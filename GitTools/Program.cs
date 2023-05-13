@@ -1,5 +1,4 @@
 ﻿using Iswenzz.GitTools.CLI;
-using Iswenzz.GitTools.Sys;
 
 namespace Iswenzz.GitTools
 {
@@ -8,15 +7,12 @@ namespace Iswenzz.GitTools
     /// </summary>
     public static class Program
     {
-        public static Settings Settings { get; set; }
-
         /// <summary>
         /// The program entry point.
         /// </summary>
         /// <param name="args">The program arguments.</param>
         public static void Main(string[] args)
         {
-            Settings = new();
             CLIParser.Parse(args);
         }
     }
