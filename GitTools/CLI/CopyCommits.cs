@@ -66,7 +66,7 @@ namespace Iswenzz.GitTools.CLI
             Git input = new(User, Email, InputRepository);
             Git output = new(User, Email, OutputRepository);
 
-            string inputRepositoryName = Path.GetFileName(InputRepository);
+            string inputRepositoryName = Path.GetFileName(InputRepository).Replace(" ", "_");
             CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
 
             // Get the user commits
