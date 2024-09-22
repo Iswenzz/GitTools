@@ -1,6 +1,6 @@
 # GitTools
 
-[![Checks](https://img.shields.io/github/checks-status/Iswenzz/GitTools/master?logo=github)](https://github.com/Iswenzz/GitTools/actions)
+[![Checks](https://img.shields.io/github/check-runs/Iswenzz/GitTools/master?logo=github)](https://github.com/Iswenzz/GitTools/actions)
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/Iswenzz/GitTools?label=codefactor&logo=codefactor)](https://www.codefactor.io/repository/github/iswenzz/GitTools)
 [![CodeCov](https://img.shields.io/codecov/c/github/Iswenzz/GitTools?label=codecov&logo=codecov)](https://codecov.io/gh/Iswenzz/GitTools)
 [![License](https://img.shields.io/github/license/Iswenzz/GitTools?color=blue&logo=gitbook&logoColor=white)](https://github.com/Iswenzz/GitTools/blob/master/LICENSE)
