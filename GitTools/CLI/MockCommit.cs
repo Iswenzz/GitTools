@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using CommandLine;
 using CommandLine.Text;
 
@@ -31,16 +32,17 @@ namespace Iswenzz.GitTools.CLI
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
         {
-            get => new List<Example> {
-                new Example("Create a commit at a specific date",
-                    new MockCommit {
+            get => [
+                new("Create a commit at a specific date",
+                    new MockCommit
+                    {
                         User = "Iswenzz",
                         Email = "alexisnardiello@gmail.com",
                         OutputRepository = "C:\\Repository",
                         Message = "Happy Birthday !",
                         Date = "25/06/2021"
                     })
-            };
+            ];
         }
 
         /// <summary>

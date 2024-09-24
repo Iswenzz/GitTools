@@ -1,11 +1,12 @@
-﻿using Iswenzz.GitTools.Sys;
-using LibGit2Sharp;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
+using LibGit2Sharp;
+
+using Iswenzz.GitTools.Sys;
 
 namespace Iswenzz.GitTools.Utils
 {

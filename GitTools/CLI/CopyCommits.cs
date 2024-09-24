@@ -1,14 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+
 using CommandLine;
 using CommandLine.Text;
 using LibGit2Sharp;
 
 using Iswenzz.GitTools.Sys;
 using Iswenzz.GitTools.Utils;
-using System.IO;
 
 namespace Iswenzz.GitTools.CLI
 {
@@ -45,9 +45,10 @@ namespace Iswenzz.GitTools.CLI
         [Usage(ApplicationAlias = "gittools")]
         public static IEnumerable<Example> Examples
         {
-            get => new List<Example> {
-                new Example("Copy the commits on a specific date",
-                    new CopyCommits {
+            get => [
+                new("Copy the commits on a specific date",
+                    new CopyCommits
+                    {
                         User = "Iswenzz",
                         Email = "alexisnardiello@gmail.com",
                         InputRepository = "C:\\Repository\\A",
@@ -55,7 +56,7 @@ namespace Iswenzz.GitTools.CLI
                         SinceDate = "25/06/1999",
                         UntilDate = "04/07/2021"
                     })
-            };
+            ];
         }
 
         /// <summary>

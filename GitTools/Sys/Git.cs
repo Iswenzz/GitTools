@@ -67,13 +67,13 @@ namespace Iswenzz.GitTools.Sys
         /// Get the commits in a specific time range and can be filtered by email. 
         /// Working with squashed commits as well.
         /// </summary>
-        public List<Commit> GetCommits(DateTime sinceDate = default, DateTime untilDate = default, 
+        public List<Commit> GetCommits(DateTime sinceDate = default, DateTime untilDate = default,
             string email = null)
         {
             DateTime since = sinceDate;
             DateTime until = untilDate != DateTime.UnixEpoch ? untilDate : DateTime.Now;
 
-            List<Commit> commits = new();
+            List<Commit> commits = [];
             foreach (GitObject o in Repository.ObjectDatabase)
             {
                 try
@@ -115,9 +115,9 @@ namespace Iswenzz.GitTools.Sys
             {
                 MockCommit(commit.Message, commit.Committer.When.DateTime);
             }
-            catch (Exception e) 
-            { 
-                Console.WriteLine(e.Message); 
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
