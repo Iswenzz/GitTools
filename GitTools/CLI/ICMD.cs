@@ -1,4 +1,4 @@
-﻿namespace Iswenzz.GitTools.CLI
+﻿namespace GitTools.CLI
 {
     /// <summary>
     /// Executable command interface.

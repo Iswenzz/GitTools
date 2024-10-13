@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using LibGit2Sharp;
 
-namespace Iswenzz.GitTools.Sys
+namespace GitTools.Sys
 {
     /// <summary>
     /// Class to manipulate git.

@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Iswenzz.GitTools.CLI
+namespace GitTools.CLI
 {
     /// <summary>
     /// Class for parsing the program arguments.

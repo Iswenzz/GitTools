@@ -7,10 +7,10 @@ using CommandLine;
 using CommandLine.Text;
 using LibGit2Sharp;
 
-using Iswenzz.GitTools.Sys;
-using Iswenzz.GitTools.Utils;
+using GitTools.Sys;
+using GitTools.Utils;
 
-namespace Iswenzz.GitTools.CLI
+namespace GitTools.CLI
 {
     /// <summary>
     /// Command to copy commits from one repository to another.

@@ -8,7 +8,7 @@
     <Copyright>Iswenzz (c) 2021</Copyright>
     <PackageProjectUrl>https://iswenzz.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Iswenzz/GitTools.git</RepositoryUrl>
-    <RootNamespace>Iswenzz</RootNamespace>
+    <RootNamespace>GitTools</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

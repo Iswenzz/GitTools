@@ -6,9 +6,9 @@ using System.Linq;
 
 using LibGit2Sharp;
 
-using Iswenzz.GitTools.Sys;
+using GitTools.Sys;
 
-namespace Iswenzz.GitTools.Utils
+namespace GitTools.Utils
 {
     /// <summary>
     /// Open a temporary file in the default editor to pick all lines to select.

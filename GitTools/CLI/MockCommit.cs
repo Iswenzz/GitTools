@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using CommandLine;
 using CommandLine.Text;
 
-using Iswenzz.GitTools.Sys;
+using GitTools.Sys;
 
-namespace Iswenzz.GitTools.CLI
+namespace GitTools.CLI
 {
     /// <summary>
     /// Command to create a commit at a specific date.

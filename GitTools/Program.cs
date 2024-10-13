@@ -1,6 +1,6 @@
-﻿using Iswenzz.GitTools.CLI;
+﻿using GitTools.CLI;
 
-namespace Iswenzz.GitTools
+namespace GitTools
 {
     /// <summary>
     /// The program main class.
