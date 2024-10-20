@@ -3,7 +3,7 @@
     /// <summary>
     /// Executable command interface.
     /// </summary>
-    public interface ICMD
+    public interface ICLI
     {
         public void Execute();
     }

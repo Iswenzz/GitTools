@@ -3,7 +3,7 @@
     /// <summary>
     /// The program default CLI.
     /// </summary>
-    public class Options : ICMD
+    public class Options : ICLI
     {
         public void Execute() { }
     }

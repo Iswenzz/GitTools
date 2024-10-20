@@ -28,7 +28,7 @@ namespace GitTools.CLI
         /// </summary>
         /// <typeparam name="T">Class that implements ICommand interface.</typeparam>
         /// <param name="options">The parsed options.</param>
-        private static void ParseAndExecute<T>(T options) where T : ICMD =>
+        private static void ParseAndExecute<T>(T options) where T : ICLI =>
             options.Execute();
     }
 }

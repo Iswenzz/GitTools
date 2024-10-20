@@ -16,7 +16,7 @@ namespace GitTools.CLI
     /// Command to copy commits from one repository to another.
     /// </summary>
     [Verb("copycommits", HelpText = "Copy commits from one repository to another.")]
-    public class CopyCommits : ICMD
+    public class CopyCommits : ICLI
     {
         [Option('u', "user", Required = true, HelpText = "The user.")]
         public string User { get; set; }

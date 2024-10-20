@@ -12,7 +12,7 @@ namespace GitTools.CLI
     /// Command to create a commit at a specific date.
     /// </summary>
     [Verb("commit", HelpText = "Create a commit at a specific date.")]
-    public class MockCommit : ICMD
+    public class MockCommit : ICLI
     {
         [Option('u', "user", Required = true, HelpText = "The user.")]
         public string User { get; set; }
